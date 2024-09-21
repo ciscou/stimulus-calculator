@@ -11,7 +11,7 @@
       window.Stimulus = Application.start()
 
       Stimulus.register("calculator", class extends Controller {
-        static targets = ["display"]
+        static targets = ["result", "display"]
         static values = {
           eval: String,
           display: String,
@@ -33,6 +33,8 @@
         }
 
         appendOperand({ params: { operandToDisplay, operandToEval } }) {
+          this.updateResult()
+
           this.displayValue += operandToDisplay
           this.evalValue += operandToEval
         }
@@ -40,10 +42,24 @@
         allClear() {
           this.displayValue = ""
           this.evalValue = ""
+
+          this.updateResult()
         }
 
         displayValueChanged() {
           this.updateDisplay()
+        }
+
+        updateResult() {
+          if(this.evalValue === "") {
+            this.resultTarget.innerHTML = "0"
+            return
+          }
+
+          try {
+            this.resultTarget.innerHTML = eval(this.evalValue)
+          } catch {
+          }
         }
 
         updateDisplay() {
@@ -52,8 +68,9 @@
 
         calculate() {
           try {
-            this.evalValue = eval(this.evalValue).toString()
+            this.evalValue = eval(this.evalValue)
             this.displayValue = this.evalValue
+            this.updateResult()
           } catch {
             this.displayTarget.innerHTML = "ERROR!"
           }
@@ -63,7 +80,10 @@
   </head>
   <body class="p-32">
     <div data-controller="calculator" class="max-w-xs mx-auto grid grid-cols-4 gap-2 bg-gray-400 p-4 rounded-lg">
-      <div data-calculator-target="display" class="col-span-4 text-right text-lg bg-orange-200 p-4 rounded">Loading...</div>
+      <div class="col-span-4 bg-orange-200 p-4 rounded">
+        <div data-calculator-target="display" class="text-right">Loading...</div>
+        <div data-calculator-target="result" class="text-right text-xl">Loading...</div>
+      </div>
       <button class="btn btn-error" data-action="calculator#allClear">AC</button>
       <button class="btn btn-neutral">(</button>
       <button class="btn btn-neutral">)</button>
