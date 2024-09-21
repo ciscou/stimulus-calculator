@@ -11,10 +11,25 @@
       window.Stimulus = Application.start()
 
       Stimulus.register("calculator", class extends Controller {
-        static targets = ["display"]
+        static targets = ["display", "numberButton"]
 
         connect() {
+          console.log("connecting calculator")
+
           this.displayTarget.innerHTML = "0"
+
+          this.numberButtonTargets.forEach(btn => {
+            btn.addEventListener("click", e => this.numberButtonClicked(e))
+          })
+        }
+
+        disconnect() {
+          console.log("disconnecting calculator")
+        }
+
+        numberButtonClicked(e) {
+          if(this.displayTarget.innerHTML === "0") this.displayTarget.innerHTML = ""
+          this.displayTarget.innerHTML += e.target.innerHTML
         }
       })
     </script>
@@ -26,19 +41,19 @@
       <button class="btn btn-neutral">(</button>
       <button class="btn btn-neutral">)</button>
       <button class="btn btn-neutral">/</button>
-      <button class="btn">7</button>
-      <button class="btn">8</button>
-      <button class="btn">9</button>
+      <button class="btn" data-calculator-target="numberButton">7</button>
+      <button class="btn" data-calculator-target="numberButton">8</button>
+      <button class="btn" data-calculator-target="numberButton">9</button>
       <button class="btn btn-neutral">*</button>
-      <button class="btn">4</button>
-      <button class="btn">5</button>
-      <button class="btn">6</button>
+      <button class="btn" data-calculator-target="numberButton">4</button>
+      <button class="btn" data-calculator-target="numberButton">5</button>
+      <button class="btn" data-calculator-target="numberButton">6</button>
       <button class="btn btn-neutral">-</button>
-      <button class="btn">1</button>
-      <button class="btn">2</button>
-      <button class="btn">3</button>
+      <button class="btn" data-calculator-target="numberButton">1</button>
+      <button class="btn" data-calculator-target="numberButton">2</button>
+      <button class="btn" data-calculator-target="numberButton">3</button>
       <button class="btn btn-neutral">+</button>
-      <button class="btn">0</button>
+      <button class="btn" data-calculator-target="numberButton">0</button>
       <button class="btn btn-neutral">.</button>
       <button class="btn btn-neutral">del</button>
       <button class="btn btn-primary">=</button>
