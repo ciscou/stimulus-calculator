@@ -11,6 +11,7 @@
       window.Stimulus = Application.start()
 
       Stimulus.register("calculator", class extends Controller {
+        static outlets = ["log"]
         static targets = ["result", "display"]
         static values = {
           eval: String,
@@ -77,16 +78,21 @@
             this.displayTarget.innerHTML = "ERROR!"
           }
 
-          const ul = document.getElementById("log")
+          this.logOutlet.addLogLine([displayValueWas, this.displayValue].join(" = "))
+        }
+      })
+
+      Stimulus.register("log", class extends Controller {
+        addLogLine(line) {
           const li = document.createElement("li")
-          li.innerHTML = [displayValueWas, this.displayValue].join(" = ")
-          ul.prepend(li)
+          li.innerHTML = [new Date().toISOString(), line].join(": ")
+          this.element.prepend(li)
         }
       })
     </script>
   </head>
   <body class="p-32">
-    <div data-controller="calculator" class="max-w-xs mx-auto grid grid-cols-4 gap-2 bg-gray-400 p-4 rounded-lg">
+    <div data-controller="calculator" data-calculator-log-outlet="#log" class="max-w-xs mx-auto grid grid-cols-4 gap-2 bg-gray-400 p-4 rounded-lg">
       <div class="col-span-4 bg-orange-200 p-4 rounded">
         <div data-calculator-target="display" class="text-right">Loading...</div>
         <div data-calculator-target="result" class="text-right text-xl">Loading...</div>
@@ -113,7 +119,7 @@
       <button class="btn btn-primary" data-action="calculator#calculate">=</button>
     </div>
 
-    <ul id="log" class="max-w-xs mx-auto mt-8">
+    <ul data-controller="log" id="log" class="max-w-sm mx-auto mt-8 font-mono">
     </ul>
   </body>
 </html>
