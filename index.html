@@ -12,6 +12,10 @@
 
       Stimulus.register("calculator", class extends Controller {
         static targets = ["display"]
+        static values = {
+          eval: String,
+          display: String,
+        }
 
         connect() {
           console.log("connecting calculator")
@@ -24,35 +28,32 @@
         }
 
         appendDigit({ params: { digit } }) {
-          this.myDisplay += digit
-          this.myEval += digit
-
-          this.updateDisplay()
+          this.displayValue += digit
+          this.evalValue += digit
         }
 
         appendOperand({ params: { operandToDisplay, operandToEval } }) {
-          this.myDisplay += operandToDisplay
-          this.myEval += operandToEval
-
-          this.updateDisplay()
+          this.displayValue += operandToDisplay
+          this.evalValue += operandToEval
         }
 
         allClear() {
-          this.myDisplay = ""
-          this.myEval = ""
+          this.displayValue = ""
+          this.evalValue = ""
+        }
 
+        displayValueChanged() {
           this.updateDisplay()
         }
 
         updateDisplay() {
-          this.displayTarget.innerHTML = this.myDisplay || "0"
+          this.displayTarget.innerHTML = this.displayValue || "0"
         }
 
         calculate() {
           try {
-            this.myEval = eval(this.myEval).toString()
-            this.myDisplay = this.myEval
-            this.updateDisplay()
+            this.evalValue = eval(this.evalValue).toString()
+            this.displayValue = this.evalValue
           } catch {
             this.displayTarget.innerHTML = "ERROR!"
           }
