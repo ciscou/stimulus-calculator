@@ -16,7 +16,7 @@
         connect() {
           console.log("connecting calculator")
 
-          this.displayTarget.innerHTML = "0"
+          this.allClear()
         }
 
         disconnect() {
@@ -27,32 +27,48 @@
           if(this.displayTarget.innerHTML === "0") this.displayTarget.innerHTML = ""
           this.displayTarget.innerHTML += e.target.innerHTML
         }
+
+        appendOperand(e) {
+          this.displayTarget.innerHTML += e.target.innerHTML
+        }
+
+        allClear() {
+          this.displayTarget.innerHTML = "0"
+        }
+
+        calculate() {
+          try {
+            this.displayTarget.innerHTML = eval(this.displayTarget.innerHTML)
+          } catch {
+            this.displayTarget.innerHTML = "ERROR!"
+          }
+        }
       })
     </script>
   </head>
   <body class="p-32">
     <div data-controller="calculator" class="max-w-xs mx-auto grid grid-cols-4 gap-2 bg-gray-400 p-4 rounded-lg">
       <div data-calculator-target="display" class="col-span-4 text-right text-lg bg-orange-200 p-4 rounded">Loading...</div>
-      <button class="btn btn-error">AC</button>
+      <button class="btn btn-error" data-action="calculator#allClear">AC</button>
       <button class="btn btn-neutral">(</button>
       <button class="btn btn-neutral">)</button>
-      <button class="btn btn-neutral">/</button>
+      <button class="btn btn-neutral" data-action="calculator#appendOperand">/</button>
       <button class="btn" data-action="calculator#appendNumber">7</button>
       <button class="btn" data-action="calculator#appendNumber">8</button>
       <button class="btn" data-action="calculator#appendNumber">9</button>
-      <button class="btn btn-neutral">*</button>
+      <button class="btn btn-neutral" data-action="calculator#appendOperand">*</button>
       <button class="btn" data-action="calculator#appendNumber">4</button>
       <button class="btn" data-action="calculator#appendNumber">5</button>
       <button class="btn" data-action="calculator#appendNumber">6</button>
-      <button class="btn btn-neutral">-</button>
+      <button class="btn btn-neutral" data-action="calculator#appendOperand">-</button>
       <button class="btn" data-action="calculator#appendNumber">1</button>
       <button class="btn" data-action="calculator#appendNumber">2</button>
       <button class="btn" data-action="calculator#appendNumber">3</button>
-      <button class="btn btn-neutral">+</button>
+      <button class="btn btn-neutral" data-action="calculator#appendOperand">+</button>
       <button class="btn" data-action="calculator#appendNumber">0</button>
       <button class="btn btn-neutral">.</button>
       <button class="btn btn-neutral">del</button>
-      <button class="btn btn-primary">=</button>
+      <button class="btn btn-primary" data-action="calculator#calculate">=</button>
     </div>
   </body>
 </html>
