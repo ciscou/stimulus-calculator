@@ -67,6 +67,8 @@
         }
 
         calculate() {
+          const displayValueWas = this.displayValue
+
           try {
             this.evalValue = eval(this.evalValue)
             this.displayValue = this.evalValue
@@ -74,6 +76,11 @@
           } catch {
             this.displayTarget.innerHTML = "ERROR!"
           }
+
+          const ul = document.getElementById("log")
+          const li = document.createElement("li")
+          li.innerHTML = [displayValueWas, this.displayValue].join(" = ")
+          ul.prepend(li)
         }
       })
     </script>
@@ -105,5 +112,8 @@
       <button class="btn btn-neutral">del</button>
       <button class="btn btn-primary" data-action="calculator#calculate">=</button>
     </div>
+
+    <ul id="log" class="max-w-xs mx-auto mt-8">
+    </ul>
   </body>
 </html>
