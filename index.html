@@ -78,7 +78,9 @@
             this.displayTarget.innerHTML = "ERROR!"
           }
 
-          this.logOutlet.addLogLine([displayValueWas, this.displayValue].join(" = "))
+          this.logOutlets.forEach(logOutlet => {
+            logOutlet.addLogLine([displayValueWas, this.displayValue].join(" = "))
+          })
         }
       })
 
@@ -92,7 +94,7 @@
     </script>
   </head>
   <body class="p-32">
-    <div data-controller="calculator" data-calculator-log-outlet="#log" class="max-w-xs mx-auto grid grid-cols-4 gap-2 bg-gray-400 p-4 rounded-lg">
+    <div data-controller="calculator" data-calculator-log-outlet=".log-container" class="max-w-xs mx-auto grid grid-cols-4 gap-2 bg-gray-400 p-4 rounded-lg">
       <div class="col-span-4 bg-orange-200 p-4 rounded">
         <div data-calculator-target="display" class="text-right">Loading...</div>
         <div data-calculator-target="result" class="text-right text-xl">Loading...</div>
@@ -119,7 +121,13 @@
       <button class="btn btn-primary" data-action="calculator#calculate">=</button>
     </div>
 
-    <ul data-controller="log" id="log" class="max-w-sm mx-auto mt-8 font-mono">
+    <ul data-controller="log" class="log-container max-w-sm mx-auto mt-8 font-mono">
+    </ul>
+
+    <ul data-controller="log" class="log-container max-w-sm mx-auto mt-8 font-mono">
+    </ul>
+
+    <ul data-controller="log" class="log-container max-w-sm mx-auto mt-8 font-mono">
     </ul>
   </body>
 </html>
